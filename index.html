@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #status {
+            color: red;
+        }
+        #status.online {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Eliftech Internet Tracker </h1>
+        <h2> Vinnitsia Office</h2>
+        <h3>Today rate: <span id="rate">0</span></h3>
+    <h4> Currency Status: <span id="status" class="online">online</span> </h4>
+</body>
+<script>
+    const field = document.querySelector('#rate');
+    const statusField = document.querySelector('#status');
+    const audio = new Audio('http://www.music.helsinki.fi/tmt/opetus/uusmedia/esim/a2002011001-e02.wav');
+    audio.type  = 'audio/wav';
+    let rate    = 0;
+
+    const status_succes  = 'online';
+    const status_failure = 'offline';
+
+    window.addEventListener('offline', evt => {
+        changeStatus();
+        incRate();
+        play();
+    });
+    window.addEventListener('online', evt => {
+        changeStatus();
+    });
+    function incRate(){
+        rate++;
+        field.innerHTML = rate;
+    }
+    function play() {
+        const playPromise = audio.play();
+
+        if (playPromise !== undefined) {
+            playPromise.then( () => {
+                console.log('Playing....');
+            }).catch( error => {
+                console.log('Failed to play....' + error);
+            });
+        }
+    }
+    function changeStatus() {
+        statusField.innerHTML = statusField.innerHTML === status_succes ? status_failure : status_succes;
+        statusField.classList.toggle('online');
+    }
+</script>
+</html>
